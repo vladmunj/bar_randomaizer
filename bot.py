@@ -54,10 +54,21 @@ URL_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# ============================================================
+# START
+# ============================================================
 async def main():
+    print("Starting HTTP server...")
+    http_thread = Thread(
+        target=run_http_server,
+        daemon=True
+    )
+    http_thread.start()
+    print("Starting Telegram bot...")
     await client.start(
         bot_token=BOT_TOKEN,
     )
+    print("Telegram bot started")
     await client.run_until_disconnected()
 
 async def random_place(event, sender):
@@ -119,6 +130,4 @@ async def debug_handler(event):
         return
 
 if __name__ == "__main__":
-    client.loop.run_until_complete(
-        main()
-    )
+    asyncio.run(main())
