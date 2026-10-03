@@ -10,5 +10,6 @@ CHAT_ID = int(os.environ["CHAT_ID"])
 GENERAL_TOPIC_ID = 1
 BOT_SESSION_NAME = 'yankee_shishes_bot'
 BOT_COMMAND = '/r@yankee_shishes_bot'
+BOT_REMOVE_COMMAND = '/d'
 BOT_RANDOM_PLACE_TEXT = os.environ["RANDOM_PLACE_TEXT"]
 PLACES_PATH="places.json"

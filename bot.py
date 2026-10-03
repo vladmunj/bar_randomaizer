@@ -7,12 +7,14 @@ from config import (
     BOT_COMMAND,
     BOT_RANDOM_PLACE_TEXT,
     BOT_SESSION_NAME,
-    PLACES_PATH
+    PLACES_PATH,
+    BOT_REMOVE_COMMAND
 )
 import json
 import random
 from pathlib import Path
 import re
+from telethon.tl.types import UpdateMessageReactions
 
 PLACES_DATA = Path(PLACES_PATH)
 client = TelegramClient(BOT_SESSION_NAME, API_ID, API_HASH)
@@ -63,13 +65,26 @@ def add_place(text: str):
     links.append(link)
     store_places(links)
 
+def remove_place(text: str):
+    links = load_links()
+    link = extract_url(text)
+    if link is None: return
+    if link not in links: return
+    links.remove(link)
+    store_places(links)
+
 
 @client.on(events.NewMessage(chats=CHAT_ID))
 async def debug_handler(event):
+    if event.raw_text[:2] == BOT_REMOVE_COMMAND:
+        link = event.raw_text[2:].strip()
+        print(link)
+        remove_place(link)
+        return
     add_place(event.raw_text)
     if event.message.reply_to: return
-    if(event.raw_text == BOT_COMMAND):
-        sender = await event.get_sender()
+    sender = await event.get_sender()
+    if event.raw_text == BOT_COMMAND:
         await random_place(event,sender)
         return
 
