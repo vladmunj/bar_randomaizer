@@ -17,8 +17,7 @@ from config import (
     BOT_RANDOM_PLACE_TEXT,
     BOT_SESSION_NAME,
     PLACES_PATH,
-    BOT_REMOVE_COMMAND,
-    FLASK_PORT
+    BOT_REMOVE_COMMAND
 )
 
 # ============================================================
