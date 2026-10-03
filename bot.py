@@ -1,4 +1,13 @@
+import json
+import random
+import re
+import asyncio
+import os
 from telethon.sync import TelegramClient, events
+from pathlib import Path
+from telethon.tl.types import UpdateMessageReactions
+from threading import Thread
+from flask import Flask
 from config import (
     API_ID,
     API_HASH,
@@ -8,13 +17,35 @@ from config import (
     BOT_RANDOM_PLACE_TEXT,
     BOT_SESSION_NAME,
     PLACES_PATH,
-    BOT_REMOVE_COMMAND
+    BOT_REMOVE_COMMAND,
+    FLASK_PORT
 )
-import json
-import random
-from pathlib import Path
-import re
-from telethon.tl.types import UpdateMessageReactions
+
+# ============================================================
+# HTTP SERVER
+# ============================================================
+
+app = Flask(__name__)
+@app.route("/")
+def index():
+    return "Bot is running", 200
+
+@app.route("/health")
+def health():
+    return "OK", 200
+
+def run_http_server():
+    port = int(os.environ.get("PORT", 10000))
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=False,
+        use_reloader=False
+    )
+
+# ============================================================
+# TELEGRAM BOT
+# ============================================================
 
 PLACES_DATA = Path(PLACES_PATH)
 client = TelegramClient(BOT_SESSION_NAME, API_ID, API_HASH)
