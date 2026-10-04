@@ -1,0 +1,9 @@
+services:
+  bot:
+    build: .
+    container_name: bar_randomizer
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - .:/app
