@@ -21,10 +21,12 @@ from config import (
     BOT_WISHLIST_ADD_COMMAND,
     BOT_WISHLIST_EMPTY_TEXT,
     BOT_WISHLIST_ADDED_TEXT,
-    BOT_WISHLISH_EXISTS_TEXT
+    BOT_WISHLISH_EXISTS_TEXT,
+    BOT_WISHLIST_LIST_COMMAND
 )
 from wishlist import(
-    add_wish
+    add_wish,
+    get_user_wishes
 )
 
 # ============================================================
@@ -136,6 +138,10 @@ async def wishlist(event, sender):
             await event.respond(BOT_WISHLISH_EXISTS_TEXT)
             return
         await event.respond(BOT_WISHLIST_ADDED_TEXT)
+        return
+    if text.startswith(BOT_WISHLIST_LIST_COMMAND):
+        wishes = get_user_wishes(sender.username)
+        await event.respond(wishes)
         return
 
 

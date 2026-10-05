@@ -40,3 +40,11 @@ def add_wish(
     })
     save_wishlist(wishlist)
     return True
+
+def get_user_wishes(username: str) -> list[dict]:
+    wishlist = load_wishlist()
+    return [
+        item
+        for item in wishlist
+        if item["username"] == username
+    ]
