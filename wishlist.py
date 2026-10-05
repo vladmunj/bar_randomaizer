@@ -42,6 +42,7 @@ def add_wish(
     return True
 
 def get_user_wishes(username: str) -> list[dict]:
+    username = username.lstrip("@")
     wishlist = load_wishlist()
     return [
         item
