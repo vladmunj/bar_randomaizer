@@ -163,7 +163,7 @@ async def wishlist(event, sender):
         if not wish_deleted:
             await event.respond(BOT_WISHLIST_NUM_NOT_FOUND_TEXT)
             return
-        event.respond(BOT_WISHLIST_DELETED_SUCCESS_TEXT)
+        await event.respond(BOT_WISHLIST_DELETED_SUCCESS_TEXT)
         return
 
 async def load_user_wishes(username, event):
