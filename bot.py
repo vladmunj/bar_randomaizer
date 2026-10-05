@@ -156,7 +156,7 @@ async def wishlist(event, sender):
             await load_user_wishes(sender.username, event)
             await event.respond(BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT)
             return
-        await event.respond(wish_num)
+        print(wish_num)
         return
 
 async def load_user_wishes(username, event):
