@@ -22,7 +22,9 @@ from config import (
     BOT_WISHLIST_EMPTY_TEXT,
     BOT_WISHLIST_ADDED_TEXT,
     BOT_WISHLISH_EXISTS_TEXT,
-    BOT_WISHLIST_LIST_COMMAND
+    BOT_WISHLIST_LIST_COMMAND,
+    BOT_WISHLIST_TITLE_TEXT,
+    BOT_WISHLIST_NOT_FOUND_TEXT
 )
 from wishlist import(
     add_wish,
@@ -141,7 +143,20 @@ async def wishlist(event, sender):
         return
     if text.startswith(BOT_WISHLIST_LIST_COMMAND):
         wishes = get_user_wishes(sender.username)
-        await event.respond(wishes)
+        if not wishes:
+            await event.respond(BOT_WISHLIST_NOT_FOUND_TEXT.format(
+                wish_add_cmd = BOT_WISHLIST_ADD_COMMAND
+            ))
+            return
+        response = [
+            BOT_WISHLIST_TITLE_TEXT.format(
+                first_name = sender.first_name
+            ),
+            ""
+        ]
+        for index, item in enumerate(wishes, start = 1):
+            response.append(f"{index}. {item["wish"]}")
+        await event.respond("\n".join(response))
         return
 
 
