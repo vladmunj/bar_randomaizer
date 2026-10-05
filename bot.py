@@ -144,7 +144,7 @@ async def wishlist(event, sender):
     if text.startswith(BOT_WISHLIST_LIST_COMMAND):
         username = text.replace(BOT_WISHLIST_LIST_COMMAND,"").strip() or sender.username
         try:
-            user = client.get_entity(username)
+            user = await client.get_entity(username)
         except:
             return
         wishes = get_user_wishes(username)
