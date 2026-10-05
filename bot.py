@@ -142,6 +142,7 @@ async def wishlist(event, sender):
         await event.respond(BOT_WISHLIST_ADDED_TEXT)
         return
     if text.startswith(BOT_WISHLIST_LIST_COMMAND):
+        print(sender.username)
         wishes = get_user_wishes(sender.username)
         if not wishes:
             await event.respond(BOT_WISHLIST_NOT_FOUND_TEXT.format(
