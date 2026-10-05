@@ -146,7 +146,8 @@ async def wishlist(event, sender):
         wishes = get_user_wishes(username)
         if not wishes:
             await event.respond(BOT_WISHLIST_NOT_FOUND_TEXT.format(
-                wish_add_cmd = BOT_WISHLIST_ADD_COMMAND
+                wish_add_cmd = BOT_WISHLIST_ADD_COMMAND,
+                first_name = sender.first_name
             ))
             return
         response = [
