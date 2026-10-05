@@ -148,7 +148,7 @@ async def wishlist(event, sender):
         get_user_wishes(username, event)
         return
     if text.startswith(BOT_WISHLIST_DELETE_COMMAND):
-        wish_num = (int)text.replace(BOT_WISHLIST_DELETE_COMMAND,"").strip()
+        wish_num = int(text.replace(BOT_WISHLIST_DELETE_COMMAND,"").strip())
         if not wish_num:
             get_user_wishes(sender.username, event)
             await event.respond(BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT)
