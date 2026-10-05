@@ -145,7 +145,7 @@ async def wishlist(event, sender):
         return
     if text.startswith(BOT_WISHLIST_LIST_COMMAND):
         username = text.replace(BOT_WISHLIST_LIST_COMMAND,"").strip() or sender.username
-        await get_user_wishes(username, event)
+        await load_user_wishes(username, event)
         return
     if text.startswith(BOT_WISHLIST_DELETE_COMMAND):
         try:
@@ -153,13 +153,13 @@ async def wishlist(event, sender):
         except Exception:
             wish_num = None
         if not wish_num:
-            await get_user_wishes(sender.username, event)
+            await load_user_wishes(sender.username, event)
             await event.respond(BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT)
             return
         event.respond(wish_num)
         return
 
-async def get_user_wishes(username, event):
+async def load_user_wishes(username, event):
     try:
         user = await client.get_entity(username)
     except Exception:
