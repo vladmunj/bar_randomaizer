@@ -115,7 +115,7 @@ def remove_place(text: str):
     store_places(links)
 
 
-@client.on(events.NewMessage(chats=CHAT_ID))
+@client.on(events.NewMessage())
 async def debug_handler(event):
     if event.raw_text[:2] == BOT_REMOVE_COMMAND:
         link = event.raw_text[2:].strip()
