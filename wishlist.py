@@ -33,10 +33,10 @@ def add_wish(
         item["username"] == username
         and item["wish"].lower() == wish.lower()
         for item in wishlist
-    ): return false
+    ): return False
     wishlist.append({
         "username": username,
         "wish": wish
     })
     save_wishlist(wishlist)
-    return true
+    return True
