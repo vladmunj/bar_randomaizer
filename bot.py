@@ -17,7 +17,14 @@ from config import (
     BOT_RANDOM_PLACE_TEXT,
     BOT_SESSION_NAME,
     PLACES_PATH,
-    BOT_REMOVE_COMMAND
+    BOT_REMOVE_COMMAND,
+    BOT_WISHLIST_ADD_COMMAND,
+    BOT_WISHLIST_EMPTY_TEXT,
+    BOT_WISHLIST_ADDED_TEXT,
+    BOT_WISHLISH_EXISTS_TEXT
+)
+from wishlist import(
+    add_Wish
 )
 
 # ============================================================
@@ -114,6 +121,23 @@ def remove_place(text: str):
     links.remove(link)
     store_places(links)
 
+async def wishlist(event, sender):
+    text = event.raw_text.strip()
+    if text.startswith(BOT_WISHLIST_ADD_COMMAND):
+        wish = text.replace(BOT_WISHLIST_ADD_COMMAND,"").strip()
+        if not wish:
+            await event.respond(BOT_WISHLIST_EMPTY_TEXT)
+            return
+        added = add_wish(
+            username = sender.username,
+            wish = wish
+        )
+        if not added:
+            await event.respond(BOT_WISHLISH_EXISTS_TEXT)
+            return
+        event.respond(BOT_WISHLIST_ADDED_TEXT)
+        return
+
 
 @client.on(events.NewMessage())
 async def debug_handler(event):
@@ -127,6 +151,11 @@ async def debug_handler(event):
     sender = await event.get_sender()
     if event.raw_text == BOT_COMMAND:
         await random_place(event,sender)
+        return
+    if event.raw_text.startswith((
+        BOT_WISHLIST_ADD_COMMAND
+    )):
+        await wishlist(event,sender)
         return
 
 if __name__ == "__main__":
