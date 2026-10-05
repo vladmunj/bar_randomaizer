@@ -24,7 +24,7 @@ from config import (
     BOT_WISHLISH_EXISTS_TEXT
 )
 from wishlist import(
-    add_Wish
+    add_wish
 )
 
 # ============================================================
