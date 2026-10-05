@@ -127,7 +127,6 @@ def remove_place(text: str):
 
 async def wishlist(event, sender):
     text = event.raw_text.strip()
-    print(text)
     if text.startswith(BOT_WISHLIST_ADD_COMMAND):
         wish = text.replace(BOT_WISHLIST_ADD_COMMAND,"").strip()
         if not wish:
@@ -142,7 +141,6 @@ async def wishlist(event, sender):
             return
         await event.respond(BOT_WISHLIST_ADDED_TEXT)
         return
-    print(text)
     if text.startswith(BOT_WISHLIST_LIST_COMMAND):
         print(sender.username)
         wishes = get_user_wishes(sender.username)
@@ -177,7 +175,8 @@ async def debug_handler(event):
         await random_place(event,sender)
         return
     if event.raw_text.startswith((
-        BOT_WISHLIST_ADD_COMMAND
+        BOT_WISHLIST_ADD_COMMAND,
+        BOT_WISHLIST_LIST_COMMAND
     )):
         await wishlist(event,sender)
         return
