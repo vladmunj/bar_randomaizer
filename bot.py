@@ -143,18 +143,20 @@ async def wishlist(event, sender):
         return
     if text.startswith(BOT_WISHLIST_LIST_COMMAND):
         username = text.replace(BOT_WISHLIST_LIST_COMMAND,"").strip() or sender.username
-        print(text.replace(BOT_WISHLIST_LIST_COMMAND,"").strip())
-        print(username)
+        try:
+            user = client.get_entity(username)
+        except:
+            return
         wishes = get_user_wishes(username)
         if not wishes:
             await event.respond(BOT_WISHLIST_NOT_FOUND_TEXT.format(
                 wish_add_cmd = BOT_WISHLIST_ADD_COMMAND,
-                first_name = sender.first_name
+                first_name = user.first_name
             ))
             return
         response = [
             BOT_WISHLIST_TITLE_TEXT.format(
-                first_name = sender.first_name
+                first_name = user.first_name
             ),
             ""
         ]
