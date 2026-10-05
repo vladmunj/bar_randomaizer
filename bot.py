@@ -135,7 +135,7 @@ async def wishlist(event, sender):
         if not added:
             await event.respond(BOT_WISHLISH_EXISTS_TEXT)
             return
-        event.respond(BOT_WISHLIST_ADDED_TEXT)
+        await event.respond(BOT_WISHLIST_ADDED_TEXT)
         return
 
 
