@@ -156,8 +156,8 @@ async def wishlist(event, sender):
         except Exception:
             wish_num = None
         if not wish_num:
-            await load_user_wishes(sender.username, event)
-            await event.respond(BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT)
+            wish_count = await load_user_wishes(sender.username, event)
+            if wish_count > 0: await event.respond(BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT)
             return
         wish_deleted = delete_wish(sender.username,wish_num)
         if not wish_deleted:
@@ -166,18 +166,18 @@ async def wishlist(event, sender):
         await event.respond(BOT_WISHLIST_DELETED_SUCCESS_TEXT)
         return
 
-async def load_user_wishes(username, event):
+async def load_user_wishes(username, event) -> int:
     try:
         user = await client.get_entity(username)
     except Exception:
-        return
+        return 0
     wishes = get_user_wishes(username)
     if not wishes:
         await event.respond(BOT_WISHLIST_NOT_FOUND_TEXT.format(
             wish_add_cmd = BOT_WISHLIST_ADD_COMMAND,
             first_name = user.first_name
         ))
-        return
+        return 0
     response = [
         BOT_WISHLIST_TITLE_TEXT.format(
             first_name = user.first_name
@@ -187,6 +187,7 @@ async def load_user_wishes(username, event):
     for index, item in enumerate(wishes, start = 1):
         response.append(f"{index}. {item["wish"]}")
     await event.respond("\n".join(response))
+    return len(wishes)
 
 @client.on(events.NewMessage())
 async def debug_handler(event):
