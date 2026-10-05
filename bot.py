@@ -26,11 +26,14 @@ from config import (
     BOT_WISHLIST_TITLE_TEXT,
     BOT_WISHLIST_NOT_FOUND_TEXT,
     BOT_WISHLIST_DELETE_COMMAND,
-    BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT
+    BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT,
+    BOT_WISHLIST_NUM_NOT_FOUND_TEXT,
+    BOT_WISHLIST_DELETED_SUCCESS_TEXT
 )
 from wishlist import(
     add_wish,
-    get_user_wishes
+    get_user_wishes,
+    delete_wish
 )
 
 # ============================================================
@@ -156,7 +159,11 @@ async def wishlist(event, sender):
             await load_user_wishes(sender.username, event)
             await event.respond(BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT)
             return
-        print(wish_num)
+        wish_deleted = delete_wish(sender.username,wish_num)
+        if not wish_deleted:
+            await event.respond(BOT_WISHLIST_NUM_NOT_FOUND_TEXT)
+            return
+        event.respond(BOT_WISHLIST_DELETED_SUCCESS_TEXT)
         return
 
 async def load_user_wishes(username, event):

@@ -51,6 +51,16 @@ def get_user_wishes(username: str) -> list[dict]:
         if item["username"] == username
     ]
 
-def delete_wish(username: str, wish_number: int):
+def delete_wish(username: str, wish_number: int) -> bool:
     username = username.lstrip("@")
-    
+    wishlist = load_wishlist()
+    user_wishes = [
+        item
+        for item in wishlist
+        if item["username"] == username
+    ]
+    if wish_number < 1 or wish_number > len(user_wishes): return False
+    wish_to_delete =  user_wishes[wish_number - 1]
+    wishlist.remove(wish_to_delete)
+    save_wishlist(wishlist)
+    return True
