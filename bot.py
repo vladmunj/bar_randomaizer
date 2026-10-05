@@ -24,7 +24,9 @@ from config import (
     BOT_WISHLISH_EXISTS_TEXT,
     BOT_WISHLIST_LIST_COMMAND,
     BOT_WISHLIST_TITLE_TEXT,
-    BOT_WISHLIST_NOT_FOUND_TEXT
+    BOT_WISHLIST_NOT_FOUND_TEXT,
+    BOT_WISHLIST_DELETE_COMMAND,
+    BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT
 )
 from wishlist import(
     add_wish,
@@ -143,28 +145,38 @@ async def wishlist(event, sender):
         return
     if text.startswith(BOT_WISHLIST_LIST_COMMAND):
         username = text.replace(BOT_WISHLIST_LIST_COMMAND,"").strip() or sender.username
-        try:
-            user = await client.get_entity(username)
-        except:
+        get_user_wishes(username, event)
+        return
+    if text.startswith(BOT_WISHLIST_DELETE_COMMAND):
+        wish_num = (int)text.replace(BOT_WISHLIST_DELETE_COMMAND,"").strip()
+        if not wish_num:
+            get_user_wishes(sender.username, event)
+            await event.respond(BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT)
             return
-        wishes = get_user_wishes(username)
-        if not wishes:
-            await event.respond(BOT_WISHLIST_NOT_FOUND_TEXT.format(
-                wish_add_cmd = BOT_WISHLIST_ADD_COMMAND,
-                first_name = user.first_name
-            ))
-            return
-        response = [
-            BOT_WISHLIST_TITLE_TEXT.format(
-                first_name = user.first_name
-            ),
-            ""
-        ]
-        for index, item in enumerate(wishes, start = 1):
-            response.append(f"{index}. {item["wish"]}")
-        await event.respond("\n".join(response))
+        event.respond(wish_num)
         return
 
+async def get_user_wishes(username, event):
+    try:
+        user = await client.get_entity(username)
+    except:
+        return
+    wishes = get_user_wishes(username)
+    if not wishes:
+        await event.respond(BOT_WISHLIST_NOT_FOUND_TEXT.format(
+            wish_add_cmd = BOT_WISHLIST_ADD_COMMAND,
+            first_name = user.first_name
+        ))
+        return
+    response = [
+        BOT_WISHLIST_TITLE_TEXT.format(
+            first_name = user.first_name
+        ),
+        ""
+    ]
+    for index, item in enumerate(wishes, start = 1):
+        response.append(f"{index}. {item["wish"]}")
+    await event.respond("\n".join(response))
 
 @client.on(events.NewMessage())
 async def debug_handler(event):
@@ -181,7 +193,8 @@ async def debug_handler(event):
         return
     if event.raw_text.startswith((
         BOT_WISHLIST_ADD_COMMAND,
-        BOT_WISHLIST_LIST_COMMAND
+        BOT_WISHLIST_LIST_COMMAND,
+        BOT_WISHLIST_DELETE_COMMAND
     )):
         await wishlist(event,sender)
         return

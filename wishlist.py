@@ -25,9 +25,10 @@ def save_wishlist(wishlist: list[dict]) -> None:
         )
 
 def add_wish(
-    username: str | None,
+    username: str,
     wish: str
 ) -> bool:
+    username = username.lstrip("@")
     wishlist = load_wishlist()
     if any(
         item["username"] == username
@@ -49,3 +50,7 @@ def get_user_wishes(username: str) -> list[dict]:
         for item in wishlist
         if item["username"] == username
     ]
+
+def delete_wish(username: str, wish_number: int):
+    username = username.lstrip("@")
+    
