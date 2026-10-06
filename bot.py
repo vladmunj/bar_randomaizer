@@ -76,6 +76,7 @@ async def debug_handler(event):
             clear_action(user.id)
             await event.respond(text("gift_removed"))
         case "others_gifts":
+            clear_action(user.id)
             username = event_text.strip()
             if not username.startswith("@"):
                 await event.respond(text("incorrect_username"))
@@ -84,7 +85,6 @@ async def debug_handler(event):
             if not gifts_list:
                 await event.respond(text("empty_gifts_list"))
                 return
-            clear_action(user.id)
             await event.respond(gifts_list)
         case _:
             return
