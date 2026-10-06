@@ -48,6 +48,7 @@ async def main():
 
 @client.on(events.NewMessage())
 async def debug_handler(event):
+    print("text " + event.raw_text)
     match event.raw_text:
         case BOT_BUTTON_MENU_COMMAND:
             await event.respond(
@@ -81,7 +82,7 @@ async def debug_handler(event):
 
     @client.on(events.CallbackQuery())
     async def callback_handler(event):
-        print(event.data)
+        print("event " + event.data)
         sender = await event.get_sender()
         match event.data:
             case "bar:random":
