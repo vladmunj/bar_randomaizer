@@ -28,7 +28,6 @@ from config.app import (
 #     BOT_WISHLIST_NUM_NOT_FOUND_TEXT,
 #     BOT_WISHLIST_DELETED_SUCCESS_TEXT,
 #     BOT_BUTTON_MENU_COMMAND,
-    BOT_MENU_TITLE_TEXT
 )
 # from wishlist import(
 #     add_wish,
@@ -36,21 +35,22 @@ from config.app import (
 #     delete_wish
 # )
 from app.menu import button_menu
+from helpers.dic import text
 
 client = TelegramClient(BOT_SESSION_NAME, API_ID, API_HASH)
 
 async def main():
-    await client.start(
+    client.start(
         bot_token=BOT_TOKEN,
     )
-    await client.run_until_disconnected()
+    client.run_until_disconnected()
 
 @client.on(events.NewMessage())
 async def debug_handler(event):
     match event.raw_text:
         case BOT_BUTTON_MENU_COMMAND:
             await event.respond(
-                BOT_MENU_TITLE_TEXT,
+                text("bot_menu_title"),
                 buttons = button_menu()
             )
     # if event.raw_text[:2] == BOT_REMOVE_COMMAND:
