@@ -118,6 +118,7 @@ async def callback_handler(event):
             if not gifts_list:
                 await event.respond(text("empty_gifts_list"))
                 return
+            await event.respond(gifts_list)
             await event.respond(text("what_gift_to_remove"))
         case "gifts:others":
             clear_action(sender.id)
