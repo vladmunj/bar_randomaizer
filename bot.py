@@ -28,13 +28,15 @@ from config import (
     BOT_WISHLIST_DELETE_COMMAND,
     BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT,
     BOT_WISHLIST_NUM_NOT_FOUND_TEXT,
-    BOT_WISHLIST_DELETED_SUCCESS_TEXT
+    BOT_WISHLIST_DELETED_SUCCESS_TEXT,
+    BOT_MENU_TITLE_TEXT
 )
 from wishlist import(
     add_wish,
     get_user_wishes,
     delete_wish
 )
+from button_menu import button_menu
 
 # ============================================================
 # HTTP SERVER
@@ -165,6 +167,12 @@ async def wishlist(event, sender):
             return
         await event.respond(BOT_WISHLIST_DELETED_SUCCESS_TEXT)
         return
+    if text.startswith(BOT_BUTTON_MENU_COMMAND):
+        await event.respond(
+            BOT_MENU_TITLE_TEXT,
+            buttons = button_menu()
+        )
+        return
 
 async def load_user_wishes(username, event) -> int:
     try:
@@ -205,7 +213,8 @@ async def debug_handler(event):
     if event.raw_text.startswith((
         BOT_WISHLIST_ADD_COMMAND,
         BOT_WISHLIST_LIST_COMMAND,
-        BOT_WISHLIST_DELETE_COMMAND
+        BOT_WISHLIST_DELETE_COMMAND,
+        BOT_BUTTON_MENU_COMMAND
     )):
         await wishlist(event,sender)
         return
