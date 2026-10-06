@@ -114,7 +114,10 @@ async def callback_handler(event):
         case "gifts:remove":
             clear_action(sender.id)
             set_action(sender.id, "remove_gift")
-            await event.respond(get_user_gifts_list(sender.username))
+            gifts_list = get_user_gifts_list(sender.username)
+            if not gifts_list:
+                await event.respond(text("empty_gifts_list"))
+                return
             await event.respond(text("what_gift_to_remove"))
         case "gifts:others":
             clear_action(sender.id)
