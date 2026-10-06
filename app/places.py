@@ -1,5 +1,5 @@
 import json
-from config import PLACES_PATH
+from config.app import PLACES_PATH
 from app.random import (
     load_links
 )

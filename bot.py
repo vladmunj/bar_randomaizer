@@ -6,7 +6,7 @@ import asyncio
 from telethon.sync import TelegramClient, events
 # from pathlib import Path
 # from telethon.tl.types import UpdateMessageReactions
-from config import (
+from config.app import (
     API_ID,
     API_HASH,
     BOT_TOKEN,
