@@ -6,8 +6,6 @@ import os
 from telethon.sync import TelegramClient, events
 from pathlib import Path
 from telethon.tl.types import UpdateMessageReactions
-from threading import Thread
-from flask import Flask
 from config import (
     API_ID,
     API_HASH,
@@ -40,28 +38,6 @@ from wishlist import(
 from button_menu import button_menu
 
 # ============================================================
-# HTTP SERVER
-# ============================================================
-
-app = Flask(__name__)
-@app.route("/")
-def index():
-    return "Bot is running", 200
-
-@app.route("/health")
-def health():
-    return "OK", 200
-
-def run_http_server():
-    port = int(os.environ.get("PORT", 10000))
-    app.run(
-        host="0.0.0.0",
-        port=port,
-        debug=False,
-        use_reloader=False
-    )
-
-# ============================================================
 # TELEGRAM BOT
 # ============================================================
 
@@ -77,12 +53,6 @@ URL_PATTERN = re.compile(
 # START
 # ============================================================
 async def main():
-    print("Starting HTTP server...")
-    http_thread = Thread(
-        target=run_http_server,
-        daemon=True
-    )
-    http_thread.start()
     print("Starting Telegram bot...")
     await client.start(
         bot_token=BOT_TOKEN,
@@ -168,12 +138,6 @@ async def wishlist(event, sender):
             return
         await event.respond(BOT_WISHLIST_DELETED_SUCCESS_TEXT)
         return
-    if text.startswith(BOT_BUTTON_MENU_COMMAND):
-        await event.respond(
-            BOT_MENU_TITLE_TEXT,
-            buttons = button_menu()
-        )
-        return
 
 async def load_user_wishes(username, event) -> int:
     try:
@@ -215,9 +179,14 @@ async def debug_handler(event):
         BOT_WISHLIST_ADD_COMMAND,
         BOT_WISHLIST_LIST_COMMAND,
         BOT_WISHLIST_DELETE_COMMAND,
-        BOT_BUTTON_MENU_COMMAND
     )):
         await wishlist(event,sender)
+        return
+    if event.raw_text == BOT_BUTTON_MENU_COMMAND:
+        await event.respond(
+            BOT_MENU_TITLE_TEXT,
+            buttons = button_menu()
+        )
         return
 
 if __name__ == "__main__":

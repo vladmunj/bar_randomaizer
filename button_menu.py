@@ -4,7 +4,7 @@ def button_menu():
     return [
         [
             Button.inline(
-                "📋 Мой wishlist",
+                "📋 Мои подарки",
                 b"wishlist:list"
             )
         ]
