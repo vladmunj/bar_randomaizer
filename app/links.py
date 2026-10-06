@@ -6,7 +6,7 @@ from config.app import PLACES_PATH
 
 PLACES_DATA = Path(PLACES_PATH)
 URL_PATTERN = re.compile(
-    r"https?://2gis.kz[^\s<>\]\)]+",
+    r"https?://[^\s<>\]\)]+",
     re.IGNORECASE,
 )
 

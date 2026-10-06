@@ -81,6 +81,7 @@ async def debug_handler(event):
 
     @client.on(events.CallbackQuery())
     async def callback_handler(event):
+        print(event.data)
         sender = await event.get_sender()
         match event.data:
             case "bar:random":
