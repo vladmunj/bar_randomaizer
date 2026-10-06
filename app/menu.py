@@ -14,7 +14,11 @@ def load_menu_config():
 
 def button_menu():
     menu_config = load_menu_config()
-    return [
+    buttons = [
         Button.inline(title, command.encode())
         for title, command in menu_config.items()
+    ]
+    return [
+        buttons[i:i+2]
+        for i in range(0, len(buttons), 2)
     ]

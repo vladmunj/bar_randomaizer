@@ -1,6 +1,5 @@
 .env
 *.session
 __pycache__/
-places.json
-wishlist.json
+gifts.json
 institutions.json
