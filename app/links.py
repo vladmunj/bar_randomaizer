@@ -2,7 +2,7 @@ from pathlib import Path
 import re
 import json
 import random
-from config.app PLACES_PATH
+from config.app import PLACES_PATH
 
 PLACES_DATA = Path(PLACES_PATH)
 URL_PATTERN = re.compile(
