@@ -16,5 +16,5 @@ def button_menu():
     menu_config = load_menu_config()
     return [
         Button.inline(title, command.encode())
-        for title, command in menu_config
+        for title, command in menu_config.items()
     ]
