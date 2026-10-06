@@ -50,9 +50,9 @@ async def debug_handler(event):
     match event.raw_text:
         case BOT_BUTTON_MENU_COMMAND:
             await event.respond(
-            BOT_MENU_TITLE_TEXT,
-            buttons = button_menu()
-        )
+                BOT_MENU_TITLE_TEXT,
+                buttons = button_menu()
+            )
     # if event.raw_text[:2] == BOT_REMOVE_COMMAND:
     #     link = event.raw_text[2:].strip()
     #     print(link)
