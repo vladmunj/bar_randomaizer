@@ -14,6 +14,7 @@ from config.app import (
 #     BOT_COMMAND,
 #     BOT_RANDOM_PLACE_TEXT,
     BOT_SESSION_NAME,
+    BOT_BUTTON_MENU_COMMAND,
 #     PLACES_PATH,
 #     BOT_REMOVE_COMMAND,
 #     BOT_WISHLIST_ADD_COMMAND,
@@ -27,7 +28,7 @@ from config.app import (
 #     BOT_WISHLIST_CHOOSE_WISH_TO_DELETE_TEXT,
 #     BOT_WISHLIST_NUM_NOT_FOUND_TEXT,
 #     BOT_WISHLIST_DELETED_SUCCESS_TEXT,
-#     BOT_BUTTON_MENU_COMMAND,
+
 )
 # from wishlist import(
 #     add_wish,
@@ -48,13 +49,13 @@ async def main():
 
 @client.on(events.NewMessage())
 async def debug_handler(event):
-    print("text " + event.raw_text)
     match event.raw_text:
         case BOT_BUTTON_MENU_COMMAND:
             await event.respond(
                 text("bot_menu_title"),
                 buttons = button_menu()
             )
+
     # if event.raw_text[:2] == BOT_REMOVE_COMMAND:
     #     link = event.raw_text[2:].strip()
     #     print(link)
@@ -80,14 +81,15 @@ async def debug_handler(event):
     #     )
     #     return
 
-    @client.on(events.CallbackQuery())
-    async def callback_handler(event):
-        print("event " + event.data)
-        sender = await event.get_sender()
-        match event.data:
-            case "bar:random":
-                await random_place(event, sender)
-            case _:
-                await event.respond(text("command_not_found"))
+@client.on(events.CallbackQuery())
+async def callback_handler(event):
+    await event.answer()
+    sender = await event.get_sender()
+    command = event.data.decode()
+    match command:
+        case "bar:random":
+            await random_place(event, sender)
+        case _:
+            await event.respond(text("command_not_found"))
 
 if __name__ == "__main__": asyncio.run(main())
