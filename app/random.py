@@ -1,8 +1,8 @@
-from config import BOT_RANDOM_PLACE_TEXT
 from app.links import random_link
+from helpers.dic import text
 
 async def random_place(event, sender):
-    await event.respond(BOT_RANDOM_PLACE_TEXT.format(
+    await event.respond(text("random_place_text").format(
         first_name = sender.first_name,
         place_link = random_link()
     ))

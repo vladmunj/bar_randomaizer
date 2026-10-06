@@ -36,6 +36,7 @@ from config.app import (
 # )
 from app.menu import button_menu
 from helpers.dic import text
+from app.random import random_place
 
 client = TelegramClient(BOT_SESSION_NAME, API_ID, API_HASH)
 
@@ -77,5 +78,14 @@ async def debug_handler(event):
     #         buttons = button_menu()
     #     )
     #     return
+
+    @client.on(events.CallbackQuery())
+    async def callback_handler(event):
+        sender = await event.get_sender()
+        match event.data:
+            case "bar:random":
+                await random_place(event, sender)
+            case _:
+                await event.respond(text("command_not_found"))
 
 if __name__ == "__main__": asyncio.run(main())

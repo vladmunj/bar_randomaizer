@@ -1,3 +1,5 @@
 {
-  "bot_menu_title": "Че хочешь?"
+  "bot_menu_title": "Че хочешь?",
+  "random_place_text": "Ассалам уалейкум {first_name}, родной сходи вот сюда: \\n {place_link}",
+  "command_not_found": "Я не понял чё ты хочешь?"
 }
