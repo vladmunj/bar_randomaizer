@@ -84,6 +84,7 @@ async def debug_handler(event):
             if not gifts_list:
                 await event.respond(text("empty_gifts_list"))
                 return
+            clear_action(user.id)
             await event.respond(gifts_list)
         case _:
             return
