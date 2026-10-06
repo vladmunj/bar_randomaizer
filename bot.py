@@ -40,10 +40,10 @@ from helpers.dic import text
 client = TelegramClient(BOT_SESSION_NAME, API_ID, API_HASH)
 
 async def main():
-    client.start(
+    await client.start(
         bot_token=BOT_TOKEN,
     )
-    client.run_until_disconnected()
+    await client.run_until_disconnected()
 
 @client.on(events.NewMessage())
 async def debug_handler(event):
