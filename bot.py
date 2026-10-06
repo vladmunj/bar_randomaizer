@@ -47,23 +47,24 @@ async def debug_handler(event):
     action = get_action(user.id)
     match action:
         case "remove_bar":
+            clear_action(user.id)
             place_removed = await remove_place(client, event_text)
             if not place_removed:
                 await event.respond(text("bar_not_removed"))
                 return
-            clear_action(user.id)
             await event.respond(text("bar_removed"))
         case "add_gift":
+            clear_action(user.id)
             if not event_text.strip():
                 await event.respond(text("gift_empty"))
                 return
             added_gift = add_gift(user.username, event_text)
-            clear_action(user.id)
             if not added_gift:
                 await event.respond(text("gift_exists"))
                 return
             await event.respond(text("gift_added"))
         case "remove_gift":
+            clear_action(user.id)
             try:
                 gift_num = int(event_text.strip())
             except ValueError:
@@ -73,7 +74,6 @@ async def debug_handler(event):
             if not removed_gift:
                 await event.respond(text("gift_number_not_found"))
                 return
-            clear_action(user.id)
             await event.respond(text("gift_removed"))
         case "others_gifts":
             clear_action(user.id)
