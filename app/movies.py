@@ -34,7 +34,7 @@ async def load_random_movie(event, edit = False):
         return
     await event.respond(
         file=poster,
-        text=caption,
+        message=caption,
         buttons=buttons,
         parse_mode="md",
         force_document=False
