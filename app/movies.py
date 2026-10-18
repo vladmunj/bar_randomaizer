@@ -8,7 +8,6 @@ from config.app import (
     DEFAULT_POSTER_RUS
 )
 from pathlib import Path
-import mimetypes
 from urllib.parse import urlparse
 
 class NamedBytesIO(BytesIO):
@@ -22,7 +21,7 @@ async def load_random_movie(event):
         await event.respond(text("movie_not_found"))
         return
     caption = __prepare_caption(movie)
-    buttons = __prepare_buttons()
+    buttons = __prepare_buttons(movie)
     poster = await load_poster(movie)
     await event.respond(
         file=poster,
@@ -34,22 +33,29 @@ async def load_random_movie(event):
 
 def __prepare_caption(movie):
     return (
-        f"🎬 **{movie['title']}**\n"
+        f"{ "📺" if movie['type'] == TMDB_SOURCE_TYPE_TV else "🎬" } **{movie['title']}**\n"
         f"{text("source_type_tv") if movie['type'] == TMDB_SOURCE_TYPE_TV else text("source_type_movie")}"
         f" · {movie['year']}\n"
         f"⭐ {text("rating")}: {movie['rating'] or text("no_score")}\n\n"
         f"{movie['overview']}"
     )
 
-def __prepare_buttons():
-    return [
-        [
-            Button.inline(
-                f"{text("next_random_movie_button_text")}",
-                b"random:movie",
+def __prepare_buttons(movie):
+    buttons = []
+    if movie.get("trailer_url"):
+        buttons.append([
+            Button.url(
+                f"🎞 {text("source_trailer_title")}",
+                movie["trailer_url"],
             )
-        ]
-    ]
+        ])
+    buttons.append([
+        Button.inline(
+            f"{text("next_random_movie_button_text")}",
+            b"random:movie",
+        )
+    ])
+    return buttons
 
 async def load_poster(movie):
     timeout = aiohttp.ClientTimeout(total=15)
