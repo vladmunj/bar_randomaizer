@@ -5,8 +5,7 @@ from app.services.tmdb import get_random_movie
 from helpers.dic import text
 from config.app import (
     TMDB_SOURCE_TYPE_TV,
-    DEFAULT_POSTER_RUS,
-    MIME_TYPE_JPEG
+    DEFAULT_POSTER_RUS
 )
 from pathlib import Path
 import mimetypes
@@ -24,7 +23,7 @@ async def load_random_movie(event):
         return
     caption = __prepare_caption(movie)
     buttons = __prepare_buttons()
-    poster, mime_type = await load_poster(movie)
+    poster = await load_poster(movie)
     await event.respond(
         file=poster,
         message=caption,
@@ -57,11 +56,7 @@ async def load_poster(movie):
     if not movie["poster_url"]:
         fallback_path = Path(DEFAULT_POSTER_RUS)
         image_data = fallback_path.read_bytes()
-        mime_type = (
-            mimetypes.guess_type(fallback_path.name)[0]
-            or MIME_TYPE_JPEG
-        )
-        return NamedBytesIO(image_data, fallback_path.name), mime_type
+        return NamedBytesIO(image_data, fallback_path.name)
     poster_url = movie.get("poster_url")
     async with aiohttp.ClientSession(timeout=timeout) as session:
         async with session.get(
@@ -71,8 +66,4 @@ async def load_poster(movie):
             image_data = await response.read()
         filename = Path(urlparse(poster_url).path).name
         if not Path(filename).suffix: filename = "poster.jpg"
-        mime_type = (
-            mimetypes.guess_type(filename)[0]
-            or MIME_TYPE_JPEG
-        )
-        return NamedBytesIO(image_data, filename), mime_type
+        return NamedBytesIO(image_data, filename)
