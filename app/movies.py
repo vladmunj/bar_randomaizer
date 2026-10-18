@@ -6,11 +6,12 @@ from helpers.dic import text
 from config.app import (
     TMDB_SOURCE_TYPE_TV,
     DEFAULT_POSTER_RUS,
-    TMDB_MAX_OVERVIEW_LENGTH
+    TMDB_MAX_OVERVIEW_LENGTH,
+    KINOGO_SEARCH_URL,
+    KINOPOISK_SEARCH_URL
 )
 from pathlib import Path
 from urllib.parse import urlparse
-from app.services.movie_links import find_movie_links
 
 class NamedBytesIO(BytesIO):
     def __init__(self, data: bytes, filename: str):
@@ -23,11 +24,7 @@ async def load_random_movie(event, edit = False):
         await event.respond(text("movie_not_found"))
         return
     caption = __prepare_caption(movie)
-    links = await find_movie_links(
-        title=movie["title"],
-        year=movie["year"]
-    )
-    buttons = __prepare_buttons(movie, links)
+    buttons = __prepare_buttons(movie)
     poster = await load_poster(movie)
     if edit:
         await event.edit(
@@ -58,7 +55,7 @@ def __prepare_caption(movie):
         f"{overview}"
     )
 
-def __prepare_buttons(movie, links):
+def __prepare_buttons(movie):
     buttons = []
     if movie.get("trailer_url"):
         buttons.append([
@@ -67,20 +64,15 @@ def __prepare_buttons(movie, links):
                 movie["trailer_url"],
             )
         ])
-    watch_buttons = []
-    if links.get("kinogo_url"):
-        watch_buttons.append(
-            Button.url("▶ Смотреть на Kinogo", links["kinogo_url"])
-        )
-    if links.get("kinopoisk_url"):
-        watch_buttons.append(
-            Button.url(
-                "🎬 Кинопоиск",
-                links["kinopoisk_url"],
-            )
-        )
-    if watch_buttons: buttons.append(watch_buttons)
     buttons.append([
+        Button.url(
+            text("kinogo_watch_button_title"),
+            KINOGO_SEARCH_URL + movie["title"]
+        ),
+        Button.url(
+            text("kinopoisk_watch_button_title"),
+            KINOPOISK_SEARCH_URL + movie["title"],
+        ),
         Button.inline(
             f"{text("next_random_movie_button_text")}",
             b"random:movie:next",

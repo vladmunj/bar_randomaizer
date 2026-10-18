@@ -25,9 +25,7 @@ TMDB_MIN_RATING = os.getenv("TMDB_MIN_RATING")
 DEFAULT_POSTER_RUS = Path(__file__).resolve().parent.parent/"assets"/"no_poster_rus.jpg"
 LOCALES_PATH = Path(__file__).resolve().parent.parent/"config"/"locales.json"
 TMDB_MAX_OVERVIEW_LENGTH = 700
-KINOGO_BASE_URL = "https://kinogo.family/"
 KINOGO_SEARCH_URL = "https://kinogo.family/search/"
-KINOPOISK_BASE_URL = "https://www.kinopoisk.ru/"
 KINOPOISK_SEARCH_URL = "https://www.kinopoisk.ru/new-search/?text="
 MOVIE_LINKS_HEADERS = {
     "User-Agent": (
