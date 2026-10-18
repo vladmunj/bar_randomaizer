@@ -10,6 +10,7 @@ from config.app import (
 )
 from pathlib import Path
 from urllib.parse import urlparse
+from app.services.movie_links import find_movie_links
 
 class NamedBytesIO(BytesIO):
     def __init__(self, data: bytes, filename: str):
@@ -22,7 +23,11 @@ async def load_random_movie(event, edit = False):
         await event.respond(text("movie_not_found"))
         return
     caption = __prepare_caption(movie)
-    buttons = __prepare_buttons(movie)
+    links = await find_movie_links(
+        title=movie["title"],
+        year=movie["year"]
+    )
+    buttons = __prepare_buttons(movie, links)
     poster = await load_poster(movie)
     if edit:
         await event.edit(
@@ -49,11 +54,11 @@ def __prepare_caption(movie):
         f"{ "📺" if movie['type'] == TMDB_SOURCE_TYPE_TV else "🎬" } **{movie['title']}**\n"
         f"{text("source_type_tv") if movie['type'] == TMDB_SOURCE_TYPE_TV else text("source_type_movie")}"
         f" · {movie['year']}\n"
-        f"⭐ {text("rating")}: {movie['rating'] or text("no_score")}\n\n"
+        f"⭐ {text("rating")} TMDB: {movie['rating'] or text("no_score")}\n\n"
         f"{overview}"
     )
 
-def __prepare_buttons(movie):
+def __prepare_buttons(movie, links):
     buttons = []
     if movie.get("trailer_url"):
         buttons.append([
@@ -62,6 +67,19 @@ def __prepare_buttons(movie):
                 movie["trailer_url"],
             )
         ])
+    watch_buttons = []
+    if links.get("kinogo_url"):
+        watch_buttons.append(
+            Button.url("▶ Смотреть на Kinogo", links["kinogo_url"])
+        )
+    if links.get("kinopoisk_url"):
+        watch_buttons.append(
+            Button.url(
+                "🎬 Кинопоиск",
+                links["kinopoisk_url"],
+            )
+        )
+    if watch_buttons: buttons.append(watch_buttons)
     buttons.append([
         Button.inline(
             f"{text("next_random_movie_button_text")}",

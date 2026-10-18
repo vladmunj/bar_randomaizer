@@ -27,5 +27,6 @@
   "no_score": "Нет оценки",
   "next_random_movie_button_text": "Хуйня 🍿, давай по новой",
   "tmdb_get_trailer_error": "Не удалось получить трейлер TMDB",
-  "source_trailer_title": "Трейлер"
+  "source_trailer_title": "Трейлер",
+  "request_error": "Ошибка запроса"
 }
