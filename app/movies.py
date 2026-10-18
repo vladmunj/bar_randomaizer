@@ -12,6 +12,7 @@ from config.app import (
 )
 from pathlib import Path
 from urllib.parse import urlparse
+from urllib.parse import quote
 
 class NamedBytesIO(BytesIO):
     def __init__(self, data: bytes, filename: str):
@@ -64,14 +65,15 @@ def __prepare_buttons(movie):
                 movie["trailer_url"],
             )
         ])
+    encoded_title = quote(movie["title"], safe="")
     watch_buttons = [
         Button.url(
             text("kinogo_watch_button_title"),
-            KINOGO_SEARCH_URL + movie["title"]
+            KINOGO_SEARCH_URL + encoded_title
         ),
         Button.url(
             text("kinopoisk_watch_button_title"),
-            KINOPOISK_SEARCH_URL + movie["title"],
+            KINOPOISK_SEARCH_URL + encoded_title,
         )
     ]
     buttons.append(watch_buttons)
