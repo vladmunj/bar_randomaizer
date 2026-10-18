@@ -44,16 +44,17 @@ async def debug_handler(event):
         )
         return
     user = await event.get_sender()
-    clear_action(user.id)
     action = get_action(user.id)
     match action:
         case "remove_bar":
+            clear_action(user.id)
             place_removed = await remove_place(client, event_text)
             if not place_removed:
                 await event.respond(text("bar_not_removed"))
                 return
             await event.respond(text("bar_removed"))
         case "add_gift":
+            clear_action(user.id)
             if not event_text.strip():
                 await event.respond(text("gift_empty"))
                 return
@@ -63,6 +64,7 @@ async def debug_handler(event):
                 return
             await event.respond(text("gift_added"))
         case "remove_gift":
+            clear_action(user.id)
             try:
                 gift_num = int(event_text.strip())
             except ValueError:
@@ -74,6 +76,7 @@ async def debug_handler(event):
                 return
             await event.respond(text("gift_removed"))
         case "others_gifts":
+            clear_action(user.id)
             username = event_text.strip()
             if not username.startswith("@"):
                 await event.respond(text("incorrect_username"))
@@ -90,12 +93,12 @@ async def debug_handler(event):
 async def callback_handler(event):
     await event.answer()
     sender = await event.get_sender()
-    clear_action(sender.id)
     command = event.data.decode()
     match command:
         case "bar:random":
             await random_place(event, sender)
         case "bar:remove":
+            clear_action(sender.id)
             set_action(sender.id, "remove_bar")
             await event.respond(text("set_bar_link"))
         case "gifts:my":
@@ -105,9 +108,11 @@ async def callback_handler(event):
                 return
             await event.respond(gifts_list)
         case "gifts:add":
+            clear_action(sender.id)
             set_action(sender.id, "add_gift")
             await event.respond(text("what_gift"))
         case "gifts:remove":
+            clear_action(sender.id)
             set_action(sender.id, "remove_gift")
             gifts_list = get_user_gifts_list(sender.username)
             if not gifts_list:
@@ -116,6 +121,7 @@ async def callback_handler(event):
             await event.respond(gifts_list)
             await event.respond(text("what_gift_to_remove"))
         case "gifts:others":
+            clear_action(sender.id)
             set_action(sender.id, "others_gifts")
             await event.respond(text("whose_gifts_we_arelooking_for"))
         case _:
