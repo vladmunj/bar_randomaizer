@@ -23,9 +23,9 @@ async def load_random_movie(event):
     caption = __prepare_caption(movie)
     buttons = __prepare_buttons(movie)
     poster = await load_poster(movie)
-    await event.respond(
+    await event.edit(
         file=poster,
-        message=caption,
+        text=caption,
         buttons=buttons,
         parse_mode="md",
         force_document=False
