@@ -23,3 +23,4 @@ TMDB_SOURCE_TYPE_MOVIE = "movie"
 TMDB_MOVIE_TYPES = [TMDB_SOURCE_TYPE_MOVIE, TMDB_SOURCE_TYPE_TV]
 TMDB_MIN_RATING = os.getenv("TMDB_MIN_RATING")
 DEFAULT_POSTER_RUS = Path(__file__).resolve().parent.parent/"assets"/"no_poster_rus.jpg"
+MIME_TYPE_JPEG = "image/jpeg"
