@@ -24,3 +24,4 @@ TMDB_MOVIE_TYPES = [TMDB_SOURCE_TYPE_MOVIE, TMDB_SOURCE_TYPE_TV]
 TMDB_MIN_RATING = os.getenv("TMDB_MIN_RATING")
 DEFAULT_POSTER_RUS = Path(__file__).resolve().parent.parent/"assets"/"no_poster_rus.jpg"
 LOCALES_PATH = Path(__file__).resolve().parent.parent/"config"/"locales.json"
+TMDB_MAX_OVERVIEW_LENGTH = 700

@@ -5,7 +5,8 @@ from app.services.tmdb import get_random_movie
 from helpers.dic import text
 from config.app import (
     TMDB_SOURCE_TYPE_TV,
-    DEFAULT_POSTER_RUS
+    DEFAULT_POSTER_RUS,
+    TMDB_MAX_OVERVIEW_LENGTH
 )
 from pathlib import Path
 from urllib.parse import urlparse
@@ -41,12 +42,15 @@ async def load_random_movie(event, edit = False):
     )
 
 def __prepare_caption(movie):
+    overview = movie["overview"]
+    if len(overview) > TMDB_MAX_OVERVIEW_LENGTH:
+        overview = overview[:TMDB_MAX_OVERVIEW_LENGTH].rsplit(" ", 1)[0] + "…"
     return (
         f"{ "📺" if movie['type'] == TMDB_SOURCE_TYPE_TV else "🎬" } **{movie['title']}**\n"
         f"{text("source_type_tv") if movie['type'] == TMDB_SOURCE_TYPE_TV else text("source_type_movie")}"
         f" · {movie['year']}\n"
         f"⭐ {text("rating")}: {movie['rating'] or text("no_score")}\n\n"
-        f"{movie['overview']}"
+        f"{overview}"
     )
 
 def __prepare_buttons(movie):
