@@ -56,15 +56,15 @@ def __prepare_caption(movie):
     )
 
 def __prepare_buttons(movie):
-    movie_buttons = []
+    buttons = []
     if movie.get("trailer_url"):
-        movie_buttons.append([
+        buttons.append([
             Button.url(
                 f"🎞 {text("source_trailer_title")}",
                 movie["trailer_url"],
             )
         ])
-    action_buttons = [[
+    watch_buttons = [
         Button.url(
             text("kinogo_watch_button_title"),
             KINOGO_SEARCH_URL + movie["title"]
@@ -73,15 +73,15 @@ def __prepare_buttons(movie):
             text("kinopoisk_watch_button_title"),
             KINOPOISK_SEARCH_URL + movie["title"],
         )
-    ]]
-    movie_buttons.append(action_buttons)
-    movie_buttons.append([
+    ]
+    buttons.append(watch_buttons)
+    buttons.append([
         Button.inline(
             f"{text("next_random_movie_button_text")}",
             b"random:movie:next",
         )
     ])
-    return movie_buttons
+    return buttons
 
 async def load_poster(movie):
     timeout = aiohttp.ClientTimeout(total=15)
