@@ -15,5 +15,15 @@
   "gift_removed": "Все забыл по братски",
   "whose_gifts_we_arelooking_for": "Кто конкретно? Укажи ник через @",
   "incorrect_username": "Через собачку заебал, пес жи есть, вот так пишется - @",
-  "empty_gifts_list": "Нету ещё подарков братуха, забить надо чё то"
+  "empty_gifts_list": "Нету ещё подарков братуха, забить надо чё то",
+  "tmdb_key_not_set": "Не задан TMDB_API_KEY",
+  "no_title": "Без названия",
+  "no_description": "Описание отсутствует",
+  "unknown": "Неизвестен",
+  "movie_not_found": "Че то не нашел ничего братуха, ебани ещё раз",
+  "source_type_tv": "Сериал",
+  "source_type_movie": "Фильм",
+  "rating": "Рейтинг",
+  "no_score": "Нет оценки",
+  "next_random_movie_button_text": "Хуйня 🍿, давай по новой"
 }

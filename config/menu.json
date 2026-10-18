@@ -4,5 +4,6 @@
     "📋 Мои подарки": "gifts:my",
     "➕ Добавить подарок": "gifts:add",
     "🗑️ Удалить подарок": "gifts:remove",
-    "🎁 Чужие подарки": "gifts:others"
+    "🎁 Чужие подарки": "gifts:others",
+    "🎬 Удиви меня": "random:movie"
 }

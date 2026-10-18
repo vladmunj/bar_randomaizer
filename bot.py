@@ -24,6 +24,7 @@ from app.gifts import (
     get_user_gifts_list,
     delete_gift
 )
+from app.movies import load_random_movie
 
 client = TelegramClient(BOT_SESSION_NAME, API_ID, API_HASH)
 
@@ -124,6 +125,8 @@ async def callback_handler(event):
             clear_action(sender.id)
             set_action(sender.id, "others_gifts")
             await event.respond(text("whose_gifts_we_arelooking_for"))
+        case "random:movie":
+            await load_random_movie(event)
         case _:
             return
 
