@@ -30,8 +30,7 @@ async def load_random_movie(event):
         message=caption,
         buttons=buttons,
         parse_mode="md",
-        force_document=False,
-        mime_type=mime_type
+        force_document=False
     )
 
 def __prepare_caption(movie):
