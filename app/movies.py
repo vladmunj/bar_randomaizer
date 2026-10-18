@@ -21,6 +21,7 @@ async def load_random_movie(event):
         message=caption,
         buttons=buttons,
         parse_mode="md",
+        force_document=False
     )
 
 def __prepare_cation(movie):
@@ -37,7 +38,7 @@ def __prepare_buttons():
         [
             Button.inline(
                 f"{text("next_random_movie_button_text")}",
-                b"movie:random",
+                b"random:movie",
             )
         ]
     ]
