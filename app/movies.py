@@ -15,7 +15,7 @@ class NamedBytesIO(BytesIO):
         super().__init__(data)
         self.name = filename
 
-async def load_random_movie(event):
+async def load_random_movie(event, edit = False):
     movie = await get_random_movie()
     if movie is None:
         await event.respond(text("movie_not_found"))
@@ -23,7 +23,16 @@ async def load_random_movie(event):
     caption = __prepare_caption(movie)
     buttons = __prepare_buttons(movie)
     poster = await load_poster(movie)
-    await event.edit(
+    if edit:
+        await event.edit(
+            file=poster,
+            text=caption,
+            buttons=buttons,
+            parse_mode="md",
+            force_document=False
+        )
+        return
+    await event.respond(
         file=poster,
         text=caption,
         buttons=buttons,
@@ -52,7 +61,7 @@ def __prepare_buttons(movie):
     buttons.append([
         Button.inline(
             f"{text("next_random_movie_button_text")}",
-            b"random:movie",
+            b"random:movie:next",
         )
     ])
     return buttons

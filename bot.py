@@ -127,6 +127,8 @@ async def callback_handler(event):
             await event.respond(text("whose_gifts_we_arelooking_for"))
         case "random:movie":
             await load_random_movie(event)
+        case "random:movie:next":
+            await load_random_movie(event, True)
         case _:
             return
 
