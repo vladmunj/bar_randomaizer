@@ -34,4 +34,4 @@ MOVIE_LINKS_HEADERS = {
         "Chrome/130.0.0.0 Safari/537.36"
     )
 }
-LAMPA_BASE_URL = "https://lampa.mx/"
+LAMPA_BASE_URL = "http://lampa.mx/"
