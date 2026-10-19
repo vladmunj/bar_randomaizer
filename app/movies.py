@@ -8,7 +8,8 @@ from config.app import (
     DEFAULT_POSTER_RUS,
     TMDB_MAX_OVERVIEW_LENGTH,
     KINOGO_SEARCH_URL,
-    KINOPOISK_SEARCH_URL
+    KINOPOISK_SEARCH_URL,
+    LAMPA_BASE_URL
 )
 from pathlib import Path
 from urllib.parse import urlparse
@@ -74,6 +75,10 @@ def __prepare_buttons(movie):
         Button.url(
             text("kinopoisk_watch_button_title"),
             KINOPOISK_SEARCH_URL + encoded_title,
+        ),
+        Button.url(
+            text("lampa_watch_button_title"),
+            LAMPA_BASE_URL + f"?card={movie['id']}&media={movie['type']}&source=tmdb"
         )
     ]
     buttons.append(watch_buttons)
