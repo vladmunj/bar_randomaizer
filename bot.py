@@ -22,7 +22,8 @@ from app.actions import (
 from app.gifts import (
     add_gift,
     get_user_gifts_list,
-    delete_gift
+    delete_gift,
+    extract_gift_url
 )
 from app.movies import load_random_movie
 
@@ -56,14 +57,22 @@ async def debug_handler(event):
             await event.respond(text("bar_removed"))
         case "add_gift":
             clear_action(user.id)
-            if not event_text.strip():
+            gift_url = extract_gift_url(event_text)
+            if not gift_url:
                 await event.respond(text("gift_empty"))
                 return
-            added_gift = add_gift(user.username, event_text)
+            added_gift = add_gift(user.username, gift_url)
             if not added_gift:
-                await event.respond(text("gift_exists"))
-                return
-            await event.respond(text("gift_added"))
+                response = await event.respond(text("gift_exists"))
+            else:
+                response = await event.respond(text("gift_added"))
+            asyncio.create_task(
+                delete_messages_later(
+                    event.chat_id,
+                    [event.id, response.id],
+                    delay=5,
+                )
+            )
         case "remove_gift":
             clear_action(user.id)
             try:
@@ -131,5 +140,16 @@ async def callback_handler(event):
             await load_random_movie(event, True)
         case _:
             return
+
+async def delete_messages_later(
+    chat_id: int,
+    message_ids: list[int],
+    delay: int = 5,
+):
+    await asyncio.sleep(delay)
+    try:
+        await client.delete_messages(chat_id, message_ids)
+    except Exception as error:
+        print(f"Failed to delete messages: {error}")
 
 if __name__ == "__main__": asyncio.run(main())

@@ -3,8 +3,10 @@ from pathlib import Path
 from config.app import (
     GIFTS_PATH
 )
+import re
 
 GIFTS_FILE = Path(GIFTS_PATH)
+GIFT_URL_PATTERN = re.compile(r"https?://[^\s<>\"']+", re.IGNORECASE)
 
 def load_gifts() -> list[dict]:
     if not GIFTS_FILE.exists(): return []
@@ -69,3 +71,9 @@ def get_user_gifts_list(username: str) -> str | bool:
     for index, item in enumerate(gifts, start=1):
         gifts_list.append(f"{index}. {item["gift"]}")
     return "\n".join(gifts_list)
+
+def extract_gift_url(message: str) -> str | None:
+    if not message: return None
+    match = GIFT_URL_PATTERN.search(message)
+    if not match: return None
+    return match.group(0).rstrip(".,!?;:)]}")
