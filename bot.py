@@ -29,6 +29,11 @@ from app.movies import load_random_movie
 
 client = TelegramClient(BOT_SESSION_NAME, API_ID, API_HASH)
 
+from app.message_cleanup import (
+    add_message_to_delete,
+    delete_messages_from_pool,
+)
+
 async def main():
     await client.start(
         bot_token=BOT_TOKEN,
@@ -66,10 +71,13 @@ async def debug_handler(event):
                 response = await event.respond(text("gift_exists"))
             else:
                 response = await event.respond(text("gift_added"))
+            add_message_to_delete(event.chat_id,user.id,event.id)
+            add_message_to_delete(event.chat_id,user.id,response.id)
             asyncio.create_task(
-                delete_messages_later(
+                delete_messages_from_pool(
+                    client,
                     event.chat_id,
-                    [event.id, response.id],
+                    user.id,
                     delay=5,
                 )
             )
@@ -120,7 +128,8 @@ async def callback_handler(event):
         case "gifts:add":
             clear_action(sender.id)
             set_action(sender.id, "add_gift")
-            await event.respond(text("what_gift"))
+            response = await event.respond(text("what_gift"))
+            add_message_to_delete(event.chat_id,sender.id,response.id)
         case "gifts:remove":
             clear_action(sender.id)
             set_action(sender.id, "remove_gift")
@@ -140,16 +149,5 @@ async def callback_handler(event):
             await load_random_movie(event, True)
         case _:
             return
-
-async def delete_messages_later(
-    chat_id: int,
-    message_ids: list[int],
-    delay: int = 5,
-):
-    await asyncio.sleep(delay)
-    try:
-        await client.delete_messages(chat_id, message_ids)
-    except Exception as error:
-        print(f"Failed to delete messages: {error}")
 
 if __name__ == "__main__": asyncio.run(main())
