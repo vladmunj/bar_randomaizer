@@ -9,7 +9,9 @@ from config.app import (
     API_HASH,
     BOT_TOKEN,
     BOT_SESSION_NAME,
-    BOT_BUTTON_MENU_COMMAND
+    BOT_BUTTON_MENU_COMMAND,
+    BOT_BUTTON_MENU_COMMAND_SIMPLE,
+    BOT_BUTTON_MENU_COMMAND_START
 )
 from app.menu import button_menu
 from helpers.dic import text
@@ -45,7 +47,11 @@ async def main():
 async def debug_handler(event):
     add_place(event)
     event_text = event.raw_text.strip()
-    if event_text == BOT_BUTTON_MENU_COMMAND:
+    if event_text in (
+            BOT_BUTTON_MENU_COMMAND,
+            BOT_BUTTON_MENU_COMMAND_SIMPLE,
+            BOT_BUTTON_MENU_COMMAND_START
+    ):
         await event.respond(
             text("bot_menu_title"),
             buttons = button_menu()
