@@ -23,7 +23,7 @@ class NamedBytesIO(BytesIO):
 async def load_random_movie(event, edit = False):
     movie = await get_random_movie()
     if movie is None:
-        await event.respond(text("movie_not_found"))
+        await event.respond(text("load_error"))
         return
     caption = __prepare_caption(movie)
     buttons = __prepare_buttons(movie)
