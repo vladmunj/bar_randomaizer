@@ -77,3 +77,15 @@ def extract_gift_url(message: str) -> str | None:
     match = GIFT_URL_PATTERN.search(message)
     if not match: return None
     return match.group(0).rstrip(".,!?;:)]}")
+
+async def is_chat_member(client, chat_id: int, username: str) -> bool:
+    username = username.lstrip("@").lower()
+    try:
+        async for participant in client.iter_participants(chat_id):
+            participant_username = getattr(participant, "username", None)
+            if participant_username and participant_username.lower() == username:
+                return True
+    except Exception as error:
+        print(f"Failed to get chat participants: {error}")
+        return False
+    return False

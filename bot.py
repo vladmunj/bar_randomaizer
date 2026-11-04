@@ -23,7 +23,8 @@ from app.gifts import (
     add_gift,
     get_user_gifts_list,
     delete_gift,
-    extract_gift_url
+    extract_gift_url,
+    is_chat_member
 )
 from app.movies import load_random_movie
 
@@ -98,6 +99,14 @@ async def debug_handler(event):
             username = event_text.strip()
             if not username.startswith("@"):
                 await event.respond(text("incorrect_username"))
+                return
+            is_member = await is_chat_member(
+                client,
+                event.chat_id,
+                username
+            )
+            if not is_member:
+                await event.respond(text("unknown_username"))
                 return
             gifts_list = get_user_gifts_list(username)
             if not gifts_list:
