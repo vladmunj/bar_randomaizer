@@ -32,5 +32,7 @@
   "kinogo_watch_button_title": "▶ Kinogo",
   "kinopoisk_watch_button_title": "🎬 Кинопоиск",
   "lampa_watch_button_title": "💡 Lampa",
-  "unknown_username": "Пользователь с указанным ником не найден либо не состоит в чате"
+  "unknown_username": "Пользователь с указанным ником не найден либо не состоит в чате",
+  "gifts_service_error": "Сервис списков желаний недоступен, попробуйте позже",
+  "gift_no_username": "Для работы со списком подарков нужно задать ник (username) в настройках Telegram"
 }

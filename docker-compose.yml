@@ -7,3 +7,12 @@ services:
       - .env
     volumes:
       - .:/app
+    networks:
+      - default
+      - wishlist
+
+networks:
+  # The wishlist app's network: its API is reachable here as http://server:3000.
+  wishlist:
+    name: wishlist_default
+    external: true

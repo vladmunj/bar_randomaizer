@@ -26,7 +26,8 @@ from app.gifts import (
     get_user_gifts_list,
     delete_gift,
     extract_gift_url,
-    is_chat_member
+    is_chat_member,
+    WishlistError
 )
 from app.movies import load_random_movie
 
@@ -59,6 +60,17 @@ async def debug_handler(event):
         return
     user = await event.get_sender()
     action = get_action(user.id)
+    try:
+        await handle_action(event, event_text, user, action)
+    except WishlistError as error:
+        print(f"Wishlist API error: {error}")
+        await event.respond(text("gifts_service_error"))
+
+async def handle_action(event, event_text, user, action):
+    if action in ("add_gift", "remove_gift") and not user.username:
+        clear_action(user.id)
+        await event.respond(text("gift_no_username"))
+        return
     match action:
         case "remove_bar":
             clear_action(user.id)
@@ -73,7 +85,7 @@ async def debug_handler(event):
             if not gift_url:
                 await event.respond(text("gift_empty"))
                 return
-            added_gift = add_gift(user.username, gift_url)
+            added_gift = await add_gift(user.username, gift_url)
             if not added_gift:
                 response = await event.respond(text("gift_exists"))
             else:
@@ -95,7 +107,7 @@ async def debug_handler(event):
             except ValueError:
                 await event.respond(text("gift_number_empty"))
                 return
-            removed_gift = delete_gift(user.username, gift_num)
+            removed_gift = await delete_gift(user.username, gift_num)
             if not removed_gift:
                 await event.respond(text("gift_number_not_found"))
                 return
@@ -114,7 +126,7 @@ async def debug_handler(event):
             if not is_member:
                 await event.respond(text("unknown_username"))
                 return
-            gifts_list = get_user_gifts_list(username)
+            gifts_list = await get_user_gifts_list(username)
             if not gifts_list:
                 await event.respond(text("empty_gifts_list"))
                 return
@@ -127,6 +139,16 @@ async def callback_handler(event):
     await event.answer()
     sender = await event.get_sender()
     command = event.data.decode()
+    try:
+        await handle_command(event, sender, command)
+    except WishlistError as error:
+        print(f"Wishlist API error: {error}")
+        await event.respond(text("gifts_service_error"))
+
+async def handle_command(event, sender, command):
+    if command in ("gifts:my", "gifts:add", "gifts:remove") and not sender.username:
+        await event.respond(text("gift_no_username"))
+        return
     match command:
         case "bar:random":
             await random_place(event, sender)
@@ -135,7 +157,7 @@ async def callback_handler(event):
             set_action(sender.id, "remove_bar")
             await event.respond(text("set_bar_link"))
         case "gifts:my":
-            gifts_list = get_user_gifts_list(sender.username)
+            gifts_list = await get_user_gifts_list(sender.username)
             if not gifts_list:
                 await event.respond(text("empty_gifts_list"))
                 return
@@ -148,7 +170,7 @@ async def callback_handler(event):
         case "gifts:remove":
             clear_action(sender.id)
             set_action(sender.id, "remove_gift")
-            gifts_list = get_user_gifts_list(sender.username)
+            gifts_list = await get_user_gifts_list(sender.username)
             if not gifts_list:
                 await event.respond(text("empty_gifts_list"))
                 return
